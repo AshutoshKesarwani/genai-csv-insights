@@ -1,10 +1,18 @@
 import os
 import json
+import streamlit as st
 from groq import Groq
 from dotenv import load_dotenv
 
 load_dotenv()
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+
+def get_api_key():
+    try:
+        return st.secrets["GROQ_API_KEY"]
+    except Exception:
+        return os.getenv("GROQ_API_KEY")
+
+client = Groq(api_key=get_api_key())
 
 def generate_insights(summary: dict) -> str:
     prompt = f"""You are a business analyst. Given this statistical summary of a dataset,
